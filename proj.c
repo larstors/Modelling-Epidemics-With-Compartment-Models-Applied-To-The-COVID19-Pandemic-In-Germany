@@ -10,7 +10,7 @@
 // FUNTION INITIALIZATION
 
 
-int function_of_system(double t, double y[], double f[], double **commuters, double *population);
+int function_of_system(double t, double y[], double f[], double **commuters, double *population, double params);
 
 void read_commuters(double **commu, int N);
 
@@ -22,7 +22,7 @@ void fill_y_array(double* y);
 
 // initializing parameters. For more explanation of these see the Latex/PDF 
 
-const double alpha = 0.2; // rate of infected
+const double alpha_1 = 0.2; // rate of infected
 const double beta = 1.0/14.0; // recovery rate
 const int dimension = 38; // dimension of the system
 const double p = 0.0264; // death rate
@@ -63,6 +63,13 @@ int main(){
     // The simmulation spans 100 days
     double t_end = 100.0;
 
+
+    // Following are different implementations for the testing of different parameters. Outcomment all of the params that are not relavant for the current run
+
+    // for testing 5 different alpha
+    double params[5] = {0.15, 0.2, 0.24, 0.28, 0.4};
+
+
     // choosing a delta_t
     // TODO maybe adjust this for better resolution/results
     double delta_t = 0.001; // this time step corresponds to about 1.4 minutes (someone please check the math on this)
@@ -70,26 +77,37 @@ int main(){
     // dimension of differential equation (as there are 4 differential equations per cell)
     int dim_deq = 4 * dimension;
 
-    // array with initial conditions
-    double y[dim_deq];
-    fill_y_array(y);
+    // array with initial conditions. As we need five such arrays we create a matrix with 5 rows
+    double **vals = (double**)malloc(sizeof(double) * 5);
+    for (int i = 0; i < 5; i++){
+        vals[i] = (double*)malloc(sizeof(double) * dim_deq);
+        fill_y_array(vals[i]);
+    }
+
 
 
     // file for saving the solution of calculations
-    FILE *sol = fopen("DiffEq.txt", "w");
+    FILE *sol = fopen("./NumData/alpha.txt", "w");
 
     // loop to solve the differential equation
     while (t_start < t_end){
-        // applying the rk4 step function to calculate the next step in y
-        rk4_step(t_start, delta_t, y, function_of_system, dim_deq, commu, population);
-
         // adding time to the file
         fprintf(sol, "%lf ", t_start);
 
-        // adding all the y values to file
-        for (int i = 0; i < dim_deq; i++){
-            fprintf(sol, "%lf ", y[i]);
+        // iterating over the different alpha's
+        for (int i = 0; i < 5; i++){
+            // applying the rk4 step function to calculate the next step in y
+            rk4_step(t_start, delta_t, vals[i], function_of_system, dim_deq, commu, population, params[i]);
+
+        
+
+            // adding all the y values to file
+            for (int k = 0; k < dim_deq; k++){
+                fprintf(sol, "%lf ", vals[i][k]);
+            }
+
         }
+        
 
         // new line in file
         fprintf(sol, "\n");
@@ -108,6 +126,12 @@ int main(){
     free(commu);
     
     free(population);
+
+    for (int i = 0; i < 5; i++){
+        free(vals[i]);
+    }
+
+    free(vals);
 
     // closing file
     fclose(sol);
@@ -163,9 +187,10 @@ void read_commuters(double **commu, int N){
  * @param f array which is to be filled with derivatives
  * @param commuters matrix with commuters
  * @param population array with population
+ * @param params parameters that are to be set manually
  * @return int 
  */
-int function_of_system(double t, double y[], double f[], double **commuters, double *population){
+int function_of_system(double t, double y[], double f[], double **commuters, double *population, double params){
     // arrays for different quantities
     // effective infected
     double *Ieff = (double*)malloc(sizeof(double) * dimension);
@@ -196,11 +221,17 @@ int function_of_system(double t, double y[], double f[], double **commuters, dou
     // fill the effective infected
     effective_infected(commuters, population, dimension, Io, Ieff);
 
-    // fill commuters
-   
+    
+    // ########################### parameters #########################
+    // this area of the function is dedicated to choosing and working with different parameters. Please comment out all the different versions that are not to be used in the run
 
-    //TODO finish the function
+    // for testing alpha
+    double alpha = params;
+
+
+    
     for (int i = 0; i < dimension; i++){
+        // fill commuters
         commutersFrom(commuters, dimension, i, CF);
         commutersTo(commuters, dimension, i, CT);
         // sum for last term in derivative. For detail see PDF/LaTeX
@@ -210,7 +241,7 @@ int function_of_system(double t, double y[], double f[], double **commuters, dou
         }
 
         // dSdt
-        f[i] = - (1 - t0) * alpha * So[i] * Io[i] - t0/population[i] * So[i] * (Neff[i] * Ieff[i] + sum);
+        f[i] = - (1 - t0) * alpha * So[i] * Io[i] - alpha * t0/population[i] * So[i] * (Neff[i] * Ieff[i] + sum);
 
         // dIdt
         f[i + dimension] = - f[i] - beta*Io[i];

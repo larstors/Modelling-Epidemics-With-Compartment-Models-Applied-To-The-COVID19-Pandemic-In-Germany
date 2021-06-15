@@ -114,7 +114,7 @@ void effective_infected(double **commuters, double *population, int dimension, d
 // ################################# TYPEDEF FUNC #####################################
 
 typedef
-int ode_func(double, const double[], double[], double**, double*);
+int ode_func(double, const double[], double[], double**, double*, double);
 
 
 
@@ -131,10 +131,11 @@ int ode_func(double, const double[], double[], double**, double*);
  * @param dim System size of differential equation
  * @param commuters 2D array with commuters
  * @param population 1D array with population of the cells
+ * @param params parameters for the function to be integrated
  */
 
 // TODO expand the rk4 to fit variaton in parameters such as alpha, beta etc.
-void rk4_step(double t, double delta_t, double y[], ode_func func, int dim, double **commuters, double *population){
+void rk4_step(double t, double delta_t, double y[], ode_func func, int dim, double **commuters, double *population, double params){
 
 	// initializing arrays
 	double *support = (double*)malloc(sizeof(double)*dim);
@@ -144,7 +145,7 @@ void rk4_step(double t, double delta_t, double y[], ode_func func, int dim, doub
 	double *k4 = (double*)malloc(sizeof(double)*dim);
 		
 	// filling k1
-	func(t, y, k1, commuters, population);
+	func(t, y, k1, commuters, population, params);
 	
 	// multiplying by delta_t
 	for (int k = 0; k < dim; k++) k1[k] *= delta_t;
@@ -153,7 +154,7 @@ void rk4_step(double t, double delta_t, double y[], ode_func func, int dim, doub
 	for (int i = 0; i < dim; i++) support[i] = y[i] + k1[i]/2.0;
 	
 	// filling k2
-	func(t + delta_t/2.0, support, k2, commuters, population);
+	func(t + delta_t/2.0, support, k2, commuters, population, params);
 	
 	// multiplying by delta_t
 	for (int k = 0; k < dim; k++) k2[k] *= delta_t;
@@ -162,7 +163,7 @@ void rk4_step(double t, double delta_t, double y[], ode_func func, int dim, doub
 	for (int i = 0; i < dim; i++) support[i] = y[i] + k2[i]/2.0;
 	
 	// filling k3
-	func(t + delta_t/2.0, support, k3, commuters, population);
+	func(t + delta_t/2.0, support, k3, commuters, population, params);
 	
 	// multiplying by delta_t
 	for (int k = 0; k < dim; k++) k3[k] *= delta_t;
@@ -171,7 +172,7 @@ void rk4_step(double t, double delta_t, double y[], ode_func func, int dim, doub
 	for (int i = 0; i < dim; i++) support[i] = y[i] + k3[i];
 	
 	// filling k4
-	func(t + delta_t, support, k4, commuters, population);
+	func(t + delta_t, support, k4, commuters, population, params);
 	
 	// multiplying by delta_t
 	for (int k = 0; k < dim; k++) k4[k] *= delta_t;
