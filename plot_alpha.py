@@ -51,57 +51,55 @@ def plotting(index):
         index (int): index of cell
     """
     import matplotlib.pyplot as plt
-    fig, axs = plt.subplots(2, 2, figsize=(9,7), sharex=True, sharey=True)
-    fig.suptitle(r"Graphical presentation the differential equation in cell %g $\beta = 1/14$, $p = 0.0264$, $t_0 = 10/24$" % (index + 1))
+    fig, axs = plt.subplots(2, 2, figsize=(10,8), sharex=True, sharey=True)
+    fig.suptitle(r"Graphische Darstellung der DGl in Knoten %g $\beta = 1/14$, $p = 0.0264$, $t_0 = 10/24$" % (index + 1), y=1.01)
 
     axs[0, 0].set_title("S")
-    axs[0, 0].set_xlabel("Time in days")
-    axs[0, 0].set_ylabel("Part of population")
-    axs[0, 0].plot(t, sol1[index, :], "b", label=r"$alpha = 0.15$")
-    axs[0, 0].plot(t, sol2[index, :], "r", label=r"$alpha = 0.2$")
-    axs[0, 0].plot(t, sol3[index, :], "g", label=r"$alpha = 0.24$")
-    axs[0, 0].plot(t, sol4[index, :], "k", label=r"$alpha = 0.28$")
-    axs[0, 0].plot(t, sol5[index, :], "m", label=r"$alpha = 0.4$")
+    axs[0, 0].set_ylabel("Teil der Population")
+    axs[0, 0].plot(t, sol1[index, :], "b", label=r"$\alpha = 0.15$")
+    axs[0, 0].plot(t, sol2[index, :], "r", label=r"$\alpha = 0.2$")
+    axs[0, 0].plot(t, sol3[index, :], "g", label=r"$\alpha = 0.24$")
+    axs[0, 0].plot(t, sol4[index, :], "k", label=r"$\alpha = 0.28$")
+    axs[0, 0].plot(t, sol5[index, :], "m", label=r"$\alpha = 0.4$")
     axs[0, 0].legend(loc="upper right")
     axs[0, 0].grid()
 
 
     axs[0, 1].set_title("I")
-    axs[0, 1].set_xlabel("Time in days")
-    axs[0, 1].set_ylabel("Part of population")
-    axs[0, 1].plot(t, sol1[index + 38, :], "b", label=r"$alpha = 0.15$")
-    axs[0, 1].plot(t, sol2[index + 38, :], "r", label=r"$alpha = 0.2$")
-    axs[0, 1].plot(t, sol3[index + 38, :], "g", label=r"$alpha = 0.24$")
-    axs[0, 1].plot(t, sol4[index + 38, :], "k", label=r"$alpha = 0.28$")
-    axs[0, 1].plot(t, sol5[index + 38, :], "m", label=r"$alpha = 0.4$")
+    axs[0, 1].plot(t, sol1[index + 38, :], "b", label=r"$\alpha = 0.15$")
+    axs[0, 1].plot(t, sol2[index + 38, :], "r", label=r"$\alpha = 0.2$")
+    axs[0, 1].plot(t, sol3[index + 38, :], "g", label=r"$\alpha = 0.24$")
+    axs[0, 1].plot(t, sol4[index + 38, :], "k", label=r"$\alpha = 0.28$")
+    axs[0, 1].plot(t, sol5[index + 38, :], "m", label=r"$\alpha = 0.4$")
     axs[0, 1].legend(loc="upper right")
     axs[0, 1].grid()
 
 
     axs[1, 0].set_title("R")
-    axs[1, 0].set_xlabel("Time in days")
-    axs[1, 0].set_ylabel("Part of population")
-    axs[1, 0].plot(t, sol1[index + 2*38, :], "b", label=r"$alpha = 0.15$")
-    axs[1, 0].plot(t, sol2[index + 2*38, :], "r", label=r"$alpha = 0.2$")
-    axs[1, 0].plot(t, sol3[index + 2*38, :], "g", label=r"$alpha = 0.24$")
-    axs[1, 0].plot(t, sol4[index + 2*38, :], "k", label=r"$alpha = 0.28$")
-    axs[1, 0].plot(t, sol5[index + 2*38, :], "m", label=r"$alpha = 0.4$")
+    axs[1, 0].set_xlabel("Zeit in Tage")
+    axs[1, 0].set_ylabel("Teil der Population")
+    axs[1, 0].plot(t, sol1[index + 2*38, :], "b", label=r"$\alpha = 0.15$")
+    axs[1, 0].plot(t, sol2[index + 2*38, :], "r", label=r"$\alpha = 0.2$")
+    axs[1, 0].plot(t, sol3[index + 2*38, :], "g", label=r"$\alpha = 0.24$")
+    axs[1, 0].plot(t, sol4[index + 2*38, :], "k", label=r"$\alpha = 0.28$")
+    axs[1, 0].plot(t, sol5[index + 2*38, :], "m", label=r"$\alpha = 0.4$")
     axs[1, 0].legend(loc="upper left")
     axs[1, 0].grid()
 
 
     axs[1, 1].set_title("D")
-    axs[1, 1].set_xlabel("Time in days")
-    axs[1, 1].set_ylabel("Part of population")
-    axs[1, 1].plot(t, sol1[index + 3*38, :], "b", label=r"$alpha = 0.15$")
-    axs[1, 1].plot(t, sol2[index + 3*38, :], "r", label=r"$alpha = 0.2$")
-    axs[1, 1].plot(t, sol3[index + 3*38, :], "g", label=r"$alpha = 0.24$")
-    axs[1, 1].plot(t, sol4[index + 3*38, :], "k", label=r"$alpha = 0.28$")
-    axs[1, 1].plot(t, sol5[index + 3*38, :], "m", label=r"$alpha = 0.4$")
+    axs[1, 1].set_xlabel("Zeit in Tage")
+    axs[1, 1].plot(t, sol1[index + 3*38, :], "b", label=r"$\alpha = 0.15$")
+    axs[1, 1].plot(t, sol2[index + 3*38, :], "r", label=r"$\alpha = 0.2$")
+    axs[1, 1].plot(t, sol3[index + 3*38, :], "g", label=r"$\alpha = 0.24$")
+    axs[1, 1].plot(t, sol4[index + 3*38, :], "k", label=r"$\alpha = 0.28$")
+    axs[1, 1].plot(t, sol5[index + 3*38, :], "m", label=r"$\alpha = 0.4$")
     axs[1, 1].legend(loc="upper right")
     axs[1, 1].grid()
 
-    plt.savefig("Media/Plots/alpha/alphaplot_%g.pdf" % index, dpi=200)
+    fig.tight_layout()
+
+    plt.savefig("Media/Plots/alpha/alphaplot_%g.pdf" % index, dpi=200, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -112,6 +110,7 @@ if __name__ == "__main__":
         plotting(i)
     """
     
+    # using this methode one save about 25s time in the program
     pool = Pool(4)
     pool.map(plotting, range(38))
     
