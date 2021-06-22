@@ -22,8 +22,8 @@ void fill_y_array(double* y);
 
 // initializing parameters. For more explanation of these see the Latex/PDF 
 
-const double alpha_1 = 0.2; // rate of infected
-const double beta = 1.0/14.0; // recovery rate
+const double alpha = 0.3; // rate of infected
+const double beta_1 = 1.0/14.0; // recovery rate
 const int dimension = 38; // dimension of the system
 const double p = 0.0264; // death rate
 // TODO find a source or a better estimate for the value (in case it isn't good enough already)
@@ -64,10 +64,9 @@ int main(){
     double t_end = 100.0;
 
 
-    // Following are different implementations for the testing of different parameters. Outcomment all of the params that are not relavant for the current run
 
-    // for testing 5 different alpha
-    double params[5] = {0.15, 0.2, 0.24, 0.28, 0.4};
+    // for testing 5 different beta
+    double params[5] = {1.0/7, 1.0/10, 1.0/14, 1.0/18, 1.0/21};
 
 
     // choosing a delta_t
@@ -87,7 +86,7 @@ int main(){
 
 
     // file for saving the solution of calculations
-    FILE *sol = fopen("./NumData/alpha.txt", "w");
+    FILE *sol = fopen("./NumData/beta.txt", "w");
 
     // loop to solve the differential equation
     while (t_start < t_end){
@@ -226,7 +225,7 @@ int function_of_system(double t, double y[], double f[], double **commuters, dou
     // this area of the function is dedicated to choosing and working with different parameters. Please comment out all the different versions that are not to be used in the run
 
     // for testing alpha
-    double alpha = params;
+    double beta = params;
 
 
     
